@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: test
+  application:
+    name: userInputs
+    version: '0.0.1'
+    description: user Input service
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /api-spec.html
+    operationsSorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,info,health
+  endpoint:
+    metrics:
+      enabled: true
