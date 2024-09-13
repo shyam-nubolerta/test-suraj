@@ -27,7 +27,7 @@ public interface UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorised")})
     @GetMapping(value = "/userMissingField/{userId}",  produces = {
             MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<UserDTO> getRequiredFileds(
+    public ResponseEntity<Map<String,String>> getRequiredFileds(
             @RequestHeader(AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME) @Parameter(name = AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME ,description = "authentication Token",required = true)  String authToken,
             @PathVariable  String userID) throws IOException, UserNotFoundException, InstantiationException, IllegalAccessException;
 

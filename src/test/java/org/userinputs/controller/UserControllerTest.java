@@ -16,7 +16,9 @@ import org.userinputs.repository.UserRepository;
 import org.userinputs.service.impl.AuthenticationServiceImpl;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,6 +65,31 @@ class UserControllerTest {
         ResponseEntity<String> response = restTemplate.exchange(url.toURI(), HttpMethod.GET,requestEntity, String.class);
         assertNotNull(response);
         assertEquals(HttpStatus.OK,response.getStatusCode());
+
+        TypeReference<Map<String,String>> typeRef
+                = new TypeReference<>() {};
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String,String> missingFiled = mapper.readValue(response.getBody(), typeRef);
+        assertNotNull(missingFiled);
+        Map<String,String> updateFiled = new HashMap<>();
+        for(String key :missingFiled.keySet()){
+            if(key.toLowerCase().contains("date")){
+                updateFiled.put(key,"2024-11-11");
+            }else {
+                updateFiled.put(key,"test");
+            }
+
+            URL url1 = new URL("http://localhost:" + port + "/api/v1/user/update");
+
+            HttpEntity<Map<String,String>> requestEntityUpdate = new HttpEntity<>(updateFiled,headers);
+
+            ResponseEntity<String> responseUpdate = restTemplate.exchange(url1.toURI(), HttpMethod.POST,requestEntityUpdate, String.class);
+
+            ObjectMapper mapper1 = new ObjectMapper();
+            assertEquals(HttpStatus.OK,responseUpdate.getStatusCode());
+            UserDTO user = mapper1.readValue(responseUpdate.getBody(),UserDTO.class);
+            assertNotNull(user);
+        }
 
     }
 

@@ -32,7 +32,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity getRequiredFileds(String authToken,String userId) throws  UserNotFoundException, InstantiationException, IllegalAccessException {
+    public ResponseEntity<Map<String,String>> getRequiredFileds(String authToken,String userId) throws  UserNotFoundException, InstantiationException, IllegalAccessException {
         return ResponseEntity.ok(userService.getMissingFileds(userId,"usersDetails"));
     }
 
