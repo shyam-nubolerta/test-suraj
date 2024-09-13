@@ -1,10 +1,12 @@
 package org.userinputs.auth;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+@EqualsAndHashCode(callSuper=false)
 public class ApiKeyAuthentication  extends AbstractAuthenticationToken {
     private final String apiKey;
 
@@ -23,5 +25,7 @@ public class ApiKeyAuthentication  extends AbstractAuthenticationToken {
     public Object getPrincipal() {
         return apiKey;
     }
+
+
 }
 

@@ -1,7 +1,6 @@
 package org.userinputs.validator;
 
 import org.userinputs.exception.UpdateRequestMalFormedException;
-import org.userinputs.exception.UserNotFoundException;
 
 import java.util.Map;
 
@@ -10,9 +9,9 @@ import static org.userinputs.service.impl.UserServiceImpl.USER_ID_VARIABLE;
 
 public class UpdateRequestValidator {
 
-
-
-    public static  void  validateUpdate(Map<String, String> updateDetails,Map<String, String> requiredFileds ) throws UpdateRequestMalFormedException, UserNotFoundException, InstantiationException, IllegalAccessException {
+    private UpdateRequestValidator(){
+    }
+    public static  void  validateUpdate(Map<String, String> updateDetails,Map<String, String> requiredFileds ) throws UpdateRequestMalFormedException{
         if(!updateDetails.containsKey(USER_ID_VARIABLE)){
             throw new UpdateRequestMalFormedException("User id filed is removed , please try getting missing fileds again");
         }

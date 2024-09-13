@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,8 +21,12 @@ import static org.userinputs.service.impl.AuthenticationServiceImpl.AUTH_TOKEN_H
 @Component
 public class LoggingAspect {
 	public static final List<String> REQUIRED_REQUEST_HEADERS_LOG = List.of(AUTH_TOKEN_HEADER_NAME);
-	@Autowired
-	private ObjectMapper mapper;
+
+	private final ObjectMapper mapper;
+
+	public LoggingAspect(ObjectMapper mapper) {
+		this.mapper = mapper;
+	}
 
 	@Pointcut("execution(* org.userinputs.controller.*.*(..))")
 	private void exceptions() {
@@ -44,8 +47,9 @@ public class LoggingAspect {
 	@AfterThrowing(pointcut = "exceptions()", throwing = "exception")
 	public void logsErrors(JoinPoint joinPoint, Throwable exception) {
 		Logger log = getLog(joinPoint);
-		log.error("An exception has been thrown at {} : {}", deriveMethodName(joinPoint), exception.getMessage());
-		log.error("Cause : {} ", exception.getStackTrace());
+		if (log.isErrorEnabled()) {
+			log.error("An exception has been thrown at {} : {}", deriveMethodName(joinPoint), exception.getMessage());
+		}
 	}
 
 	@Around("(controller() && loggingPublicOperation()) || (businessPackages() && loggingPublicOperation())")
@@ -69,8 +73,9 @@ public class LoggingAspect {
 		Logger log = getLog(joinPoint);
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
-		log.info("Request URL : {} {}", request.getMethod(), request.getRequestURI());
-		log.info("Request Headers: {}", deriveRequiredHeaders(request));
+		if (log.isInfoEnabled()) {
+			log.info("Request URL : {} {} Request Headers: {}", request.getMethod(), request.getRequestURI(), deriveRequiredHeaders(request));
+		}
 		try {
 			if (body != null) {
 				StringJoiner requestJoiner = new StringJoiner("\n");
@@ -107,7 +112,7 @@ public class LoggingAspect {
 		Map<String, String> map = new HashMap<>();
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
-			String key = (String) headerNames.nextElement();
+			String key = headerNames.nextElement();
 			String value = request.getHeader(key);
 			if (REQUIRED_REQUEST_HEADERS_LOG.stream().anyMatch(key::equalsIgnoreCase))
 				map.put(key, value);

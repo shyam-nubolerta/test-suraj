@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         this.mandatoryFieldsRepository = mandatoryFieldsRepository;
     }
 
-    public Map<String,String> getMissingFileds(String userID,String tableName) throws UserNotFoundException, InstantiationException, IllegalAccessException {
+    public Map<String,String> getMissingFileds(String userID,String tableName) throws UserNotFoundException, IllegalAccessException {
 
         Map<String , String> requiredFiledMap = new HashMap<>();
         Optional<UserEntity> user = userRepository.findById(Long.valueOf(userID));
@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
         for(Field filed : declaredFields){
             if(requiredFileds.stream().anyMatch(reqF-> StringUtils.equalsIgnoreCase(reqF.getReqfieldname(),filed.getName()))){
                 Object value = getFieldValue(filed, user.get());
-                if(value==null||(value instanceof String &&StringUtils.isBlank((String)value))){
-                    requiredFiledMap.put(filed.getName(),DEFAULT_VALUE_VARIABLE);
+                if (value==null|| (value instanceof String stringValue &&StringUtils.isBlank(stringValue))) {
+                        requiredFiledMap.put(filed.getName(),DEFAULT_VALUE_VARIABLE);
                 }
             }
 
@@ -66,20 +66,16 @@ public class UserServiceImpl implements UserService {
         return requiredFiledMap;
     }
 
-    private static Object getFieldValue(Field field, Object target) {
-        try {
+    private static Object getFieldValue(Field field, Object target) throws  IllegalAccessException {
             field.setAccessible(true);
             return field.get(target);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public List<UserDTO> getAllUsers(){
         List<UserDTO> userList = new ArrayList<>();
-          userRepository.findAll().forEach(userEntity -> {
-              userList.add(UserMapper.map(userEntity));
-          });
+          userRepository.findAll().forEach(userEntity ->
+              userList.add(UserMapper.map(userEntity))
+          );
           return userList;
     }
 
@@ -106,13 +102,9 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private void setFieldValue(Field field, UserEntity userEntity,Object value) {
-        try {
+    private void setFieldValue(Field field, UserEntity userEntity,Object value) throws IllegalAccessException{
             field.setAccessible(true);
             field.set(userEntity,value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

@@ -32,7 +32,7 @@ class UserControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
-     public void testGetAlllUsers() throws Exception {
+      void testGetAlllUsers() throws Exception {
 
         URL url = new URL("http://localhost:" + port + "/api/v1/user/getUserDetails");
         HttpHeaders headers = new HttpHeaders();
@@ -52,7 +52,7 @@ class UserControllerTest {
 
 
     @Test
-    public void testGetUserMissingFiledsForlUsers() throws Exception {
+     void testGetUserMissingFiledsForlUsers() throws Exception {
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName("test");
         userRepository.save(userEntity);

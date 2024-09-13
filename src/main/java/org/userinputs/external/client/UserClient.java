@@ -11,5 +11,5 @@ import org.userinputs.external.request.User;
 @FeignClient(value = "user-service",dismiss404=true)
 public interface UserClient {
     @PostMapping( value = "/api/v2/external/submituser")
-    ResponseEntity postUsers(@RequestBody @Validated User user);
+    ResponseEntity<User> postUsers(@RequestBody @Validated User user);
 }

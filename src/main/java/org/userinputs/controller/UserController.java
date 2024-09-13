@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.userinputs.service.impl.AuthenticationServiceImpl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,7 +37,7 @@ public interface UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorised")})
     @GetMapping(value = "/getUserDetails",  produces = {
             MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity getUserDetails(@RequestHeader(AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME) @Parameter(name = AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME ,description = "authentication Token",required = true)  String authToken);
+    public ResponseEntity<List<UserDTO>> getUserDetails(@RequestHeader(AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME) @Parameter(name = AuthenticationServiceImpl.AUTH_TOKEN_HEADER_NAME ,description = "authentication Token",required = true)  String authToken);
 
     @Operation(summary = "Update User Details")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK"),

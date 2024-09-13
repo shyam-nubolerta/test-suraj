@@ -7,6 +7,9 @@ import org.userinputs.model.UserDTO;
 @Slf4j
 public class UserMapper {
 
+    private UserMapper(){
+    }
+
     public static UserDTO map (UserEntity userEntity ){
         return new UserDTO(userEntity.getId(),userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthdate(),userEntity.getBirthplace(), userEntity.getSex(), userEntity.getCurrentaddress());
 

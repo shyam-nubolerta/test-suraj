@@ -13,7 +13,7 @@ import org.userinputs.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,17 +32,17 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity getRequiredFileds(String authToken,String userId) throws IOException, UserNotFoundException, InstantiationException, IllegalAccessException {
+    public ResponseEntity getRequiredFileds(String authToken,String userId) throws  UserNotFoundException, InstantiationException, IllegalAccessException {
         return ResponseEntity.ok(userService.getMissingFileds(userId,"usersDetails"));
     }
 
     @Override
-    public ResponseEntity getUserDetails(String authToken ) {
+    public ResponseEntity<List<UserDTO>> getUserDetails(String authToken ) {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @Override
-    public ResponseEntity updateUserDetails(String authToken,
+    public ResponseEntity<UserDTO>  updateUserDetails(String authToken,
                                            Map<String,String> updateDetails) throws UserNotFoundException, UpdateFailedException, UpdateRequestMalFormedException, InstantiationException, IllegalAccessException {
         UserDTO userDTO = userService.updateUserDetails( updateDetails);
         externalSystemService.sendUserInfo(userDTO);
