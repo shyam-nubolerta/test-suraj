@@ -29,6 +29,8 @@ springdoc:
   swagger-ui:
     path: /api-spec.html
     operationsSorter: method
+    csrf:
+      enabled: true
 
 management:
   endpoints:

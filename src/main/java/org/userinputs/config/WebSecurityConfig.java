@@ -29,7 +29,7 @@ public class WebSecurityConfig {
                   .csrf(csrf -> {if(!StringUtils.equalsIgnoreCase(activeProfile,"test")){csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler());}
                   else{csrf.disable();}})
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/h2-console/**","/swagger-ui/**","/api-docs/**","/swagger-ui.html","/api/**","/actuator/**","/v2/**").permitAll())
+                        .requestMatchers("/h2-console/**","/swagger-ui/**","/api-docs/**","/swagger-ui.html","/api/**","/actuator/**","/v2/**","/csrf").permitAll())
                 .cors(cors->cors.configurationSource(corsConfigurationSource())).formLogin(login-> login.disable());
         return httpSecurity.build();
     }
